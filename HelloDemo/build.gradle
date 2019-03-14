@@ -1,0 +1,44 @@
+buildscript {
+    ext {
+        springBootVersion = '2.0.0.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+group 'co.com.ceiba'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-web:2.0.0.RELEASE")
+}
+
+import org.apache.tools.ant.taskdefs.condition.Os
+task buildAngular(type: Exec){
+    workingDir '../HelloFront'
+    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+        println "*** WINDOWS "
+        commandLine 'cmd', '/c', 'ng build --prod'
+    }else if (Os.isFamily(Os.FAMILY_UNIX)){
+        println "*** Unix"
+        commandLine 'ng build --prod'
+    }
+}
+
+build.dependsOn buildAngular
+
+
